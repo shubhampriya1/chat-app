@@ -1,10 +1,10 @@
 
-// import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import React from "react";
 
 const Homepage = () => {
   return (
-    <Button>ch</Button>
+    <Button></Button>
   );
 };
 
