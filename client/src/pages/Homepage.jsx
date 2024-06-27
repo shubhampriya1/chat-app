@@ -1,31 +1,13 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { ModeToggle } from "@/components/mode-toggle";
 
-
-import React from "react";
 const Homepage = () => {
-
- return<div className="flex tailwind.config.jsplace-items-center">
-  <Card className="mx-auto" w-72>
-     <CardHeader>
-       <CardTitle>Card Title</CardTitle>
-       <CardDescription>Card Description</CardDescription>
-     </CardHeader>
-     <CardContent>
-       <p>Card </p>
-     </CardContent>
-     <CardFooter>
-       <p>Card Footer</p>
-     </CardFooter>
-   </Card>
-</div>
- 
+  return (
+    <div className="mt-20 space-y-5">
+      <h1 className="text-4xl">Shubham sabse acchi bacchi hai</h1>
+      <h3>Sabse cute bhi</h3>
+      <ModeToggle />
+    </div>
+  );
 };
 
 export default Homepage;
