@@ -24,7 +24,7 @@ function Login() {
         <CardHeader>
           <CardTitle>Login </CardTitle>
           <CardDescription>
-            New to medium?{" "}
+            New to Website?{" "}
             <Link to={"/register"} className="underline">
               Register
             </Link>
