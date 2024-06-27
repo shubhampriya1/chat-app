@@ -18,7 +18,7 @@ app.get("/api/:id", (req, res) => {
   console.log(req.params.id);
 });
 
-const Port = process.env.Port || 3000;
+const Port = process.env.Port || 5000;
 app.listen(Port, () => {
   console.log(`sever is running at http://localhost:${Port}`);
 });
