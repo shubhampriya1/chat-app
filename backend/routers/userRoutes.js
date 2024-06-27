@@ -1,7 +1,7 @@
 
 import { Router } from "express";
-import { register } from "../controllers/usercontrollers.js";
-// import { login } from "../controllers/logincontroller.js";
+import { register ,login} from "../controllers/usercontrollers.js";
+
 const authrouter = Router();
 authrouter.route("/").post(register);
 authrouter.route("/login").post(login);
