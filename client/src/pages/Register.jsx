@@ -29,7 +29,7 @@ function Register() {
     !email.match(emailRegex) ||
     !password.length > 8;
 
-  setLoading(false);
+  // setLoading(false);
 
   return (
     <div className="flex items-center justify-center h-screen w-screen">
