@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/mode-toggle";
 import {
   Card,
   CardContent,
@@ -11,13 +12,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  
+  const navigate = useNavigate();
+  async function submit(){
+    const backendurl = import.meta.env.Backendurl;
+    try {
+        const { data } = await axios.post(`${backendurl}/user/login`, {
+        identifier: username,
+        password: password,
+      });
+
+    navigate("/chats");
+    toast.success("Successfully Login your account");
+    } catch (error) {
+       toast.error(error.response.data);
+       
+    }
+   
+  }
   return (
     <div className="flex  items-center justify-center h-screen w-screen">
       <Card className="md:w-96  ">
@@ -61,9 +81,11 @@ function Login() {
           <Link to={"/"}>
             <Button variant="outline">Cancel</Button>
           </Link>
-          <Button onClick={() => toast.success("This is just a text toast")}>
-            Submit
-          </Button>
+         
+            <Button onClick={submit}>
+              Submit
+            </Button>
+          
         </CardFooter>
       </Card>
     </div>

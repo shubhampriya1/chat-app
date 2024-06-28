@@ -3,3 +3,10 @@
   margin: 0 auto;
   text-align: center;
 }
+
+.App{
+    background-image: url("https://media.istockphoto.com/id/1818864225/photo/senior-engineer-in-server-room.jpg?s=1024x1024&w=is&k=20&c=-UzVKD8ZfnXMXr9wm5osoWUP4uI3zaGXctyV3uq85W4=");
+     height:'150px';
+     width:"150px"
+
+  }

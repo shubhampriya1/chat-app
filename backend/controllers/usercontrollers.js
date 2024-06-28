@@ -12,10 +12,10 @@ export async function register(req, res) {
     if (useremail.length != 0) {
       return res.status(400).send("Email already exists");
     }
-    const isMatch = await bcrytpjs.compare(password, User.password);
-    if (!isMatch) {
-      return res.status(404).send("Password in incorrect");
-    }
+    // const isMatch = await bcrytpjs.compare(password, User.password);
+    // if (!isMatch) {
+    //   return res.status(404).send("Password in incorrect");
+    // }
     const newuser = new User({
       name: name,
       email: email,
