@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -25,8 +26,8 @@ function Login() {
   async function submit(){
     const backendurl = import.meta.env.Backendurl;
     try {
-        const { data } = await axios.post(`${backendurl}/user/login`, {
-        identifier: username,
+        const { data } = await axios.post(`http://localhost:5000/api/user/login`, {
+        email: username,
         password: password,
       });
 
@@ -40,7 +41,7 @@ function Login() {
   }
   return (
     <div className="flex  items-center justify-center h-screen w-screen">
-      <Card className="md:w-96  ">
+      <Card className="md:w-96 ">
         <CardHeader>
           <CardTitle>Login </CardTitle>
           <CardDescription>
@@ -54,7 +55,7 @@ function Login() {
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col items-start gap-1 space-y-1.5">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="Email">Email</Label>
                 <Input
                   id="username"
                   placeholder="Username"

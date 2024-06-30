@@ -56,7 +56,6 @@ function Register() {
                   onChange={(e) => setName(e.target.value)}
                 />
                 <p className="text-sm text-muted-foreground">
-                  Name must be more than 3 characters
                 </p>
               </div>
               <div className="flex flex-col items-start gap-1 space-y-1.5">
