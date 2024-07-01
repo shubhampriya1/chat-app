@@ -1,66 +1,38 @@
 import React, { useEffect, useState } from "react";
 import "./chatpage.css";
 import axios from "axios";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
+
 const Chatpage = () => {
   const [chats, setChats] = useState([]);
-  // useEffect((data) => {
-  //   axios
-  //     .get("http://localhost:5000/api")
-  //     .then((response) => {
-  //       setChats(response.data);
-  //       console.log(response);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // },[]);
+
   return (
-    <div className="container">
-      <div className="left">
-        <div className="header">
-          <img src="https://th.bing.com/th?id=OIP.4nSiPjYiNOlvj6KJiw2UTAAAAA&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2" />
-          <h1>Shubham Priya</h1>
-          <div className="logo">+</div>
-        </div>
-
-        <div className="leftline">
-          <div className="circle">
-            <img src="https://th.bing.com/th?id=OIP.4nSiPjYiNOlvj6KJiw2UTAAAAA&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2" />
-          </div>
-          <h1>Suchi</h1>
-        </div>
-        <div className="leftline">
-          <div className="circle">
-            <img src="https://th.bing.com/th?id=OIP.4nSiPjYiNOlvj6KJiw2UTAAAAA&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2" />
-          </div>
-          <h1>Mummy</h1>
-        </div>
-        <div className="leftline">
-          <div className="circle">
-            <img src="https://th.bing.com/th?id=OIP.4nSiPjYiNOlvj6KJiw2UTAAAAA&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2" />
-          </div>
-          <h1>Anjali</h1>
-        </div>
-      </div>
-      <div className="middle">
-        <div className="circle1">
-          <img src="https://th.bing.com/th?id=OIP.4nSiPjYiNOlvj6KJiw2UTAAAAA&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=2&pid=3.1&rm=2" />
-        </div>
-        <h1>Suchi</h1>
-      </div>
-
-      <div className="right">hiii</div>
+    <div className="w-20">
+      <Command >
+        <CommandInput className='w-1/2' placeholder="Type a command or search..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Suggestions">
+            <CommandItem>Search Emoji</CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Settings">
+            <CommandItem>Settings</CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
     </div>
   );
 };
 
 export default Chatpage;
-// {
-//   chats.map((i, index) => {
-//     return (
-//       <div key={index}>
-//         <div>{i.chatName}</div>
-//       </div>
-//     );
-//   });
-// }
