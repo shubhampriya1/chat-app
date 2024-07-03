@@ -1,12 +1,6 @@
 import generateTOken from "../config/jsonwebtoken.js";
 import { User } from "../model/user.model.js";
-import bcrytpjs from "bcryptjs";
 import asyncHandler from "express-async-handler";
-
-
-
-
-
 
 export async function register(req, res) {
   try {
@@ -20,10 +14,7 @@ export async function register(req, res) {
     if (useremail.length != 0) {
       return res.status(400).send("Email already exists");
     }
-    // const isMatch = await bcrytpjs.compare(password, User.password);
-    // if (!isMatch) {
-    //   return res.status(404).send("Password in incorrect");
-    // }
+
     const newuser = new User({
       name: name,
       email: email,
@@ -37,7 +28,7 @@ export async function register(req, res) {
       email: newuser.email,
       name: newuser.name,
       pic: newuser.pic,
-      token: generateTOken(newuser._userId),
+      token: generateTOken(newuser._id),
     });
   } catch (error) {
     console.log(error);
@@ -61,7 +52,7 @@ export async function login(req, res) {
       userId: user._id,
       username: user.username,
       useremail: user.email,
-      token: generateTOken(user._userId),
+      token: generateTOken(user._id),
     });
   } catch (error) {
     console.log(error);
@@ -77,9 +68,10 @@ export const allUser = asyncHandler(async (req, res) => {
           { email: { $regex: req.query.search, $options: "i" } },
         ],
       }
-      
     : {};
 
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  const users = await User.find(keyword).find({
+    _id: { $ne: req.user.user_id },
+  });
   res.send(users);
 });
