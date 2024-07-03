@@ -7,19 +7,7 @@ import asyncHandler from "express-async-handler";
 
 
 
-export const allUser = asyncHandler(async (req, res) => {
-  const keyword = req.query.search
-    ? {
-        $or: [
-          { name: { $regex: req.query.search, $options: "i" } },
-          { email: { $regex: req.query.search, $options: "i" } },
-        ],
-      }
-    : {};
 
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
-  res.send(users);
-});
 export async function register(req, res) {
   try {
     const { name, email, password, pic } = req.body;
@@ -80,3 +68,18 @@ export async function login(req, res) {
     return res.status(500).send("Internal server error");
   }
 }
+
+export const allUser = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+      
+    : {};
+
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  res.send(users);
+});
