@@ -7,6 +7,6 @@ router.route("/").get(protect, fetchChat);
  router.route("/group").post(protect, createGroupChat);
 router.route("/rename").put(protect, renameGroup);
 router.route("/add").put(protect, addGroup);
-router.route("/remove").put(protect, removeEventListener);
+// router.route("/remove").put(protect, removefr);
 
 export default router;
