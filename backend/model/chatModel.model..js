@@ -23,7 +23,7 @@ const chatModelSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-},{timeseries:true});
+},{timestamps:true});
 export const chatModel =mongoose.model("chatModel", chatModelSchema);
 // chatname
 //group
