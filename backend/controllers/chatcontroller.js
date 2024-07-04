@@ -127,17 +127,18 @@ export const renameGroup = asyncHandler(async (req, res) => {
 
 export const addGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
-  const added = await chatModel.findByIdAndUpdate(
-    chatId,
-    {
-      $push: { users: userId },
-    },
-    {
-      new: true,
-    }
-  )
+  const added = await chatModel
+    .findByIdAndUpdate(
+      chatId,
+      {
+        $push: { users: userId },
+      },
+      {
+        new: true,
+      }
+    )
     .populate("users", "-password")
-    .populate("groupAdmin", "-password");
+    .populate("grophAdmin", "-password");
 
   if (!added) {
     res.status(404);
@@ -146,24 +147,25 @@ export const addGroup = asyncHandler(async (req, res) => {
     res.json(added);
   }
 });
-// export const removeFromGroup = asyncHandler(async (req, res) => {
-//   const { chatId, userId } = req.body;
-//   const removed = await chatModel.findByIdAndUpdate(
-//     chatId,
-//     {
-//       $pull: { users: userId },
-//     },
-//     {
-//       new: true,
-//     }
-//   )
-//     .populate("users", "-password")
-//     .populate("groupAdmin", "-password");
+export const removeFromGroup = asyncHandler(async (req, res) => {
+  const { chatId, userId } = req.body;
+  const removed = await chatModel
+    .findByIdAndUpdate(
+      chatId,
+      {
+        $pull: { users: userId },
+      },
+      {
+        new: true,
+      }
+    )
+    .populate("users", "-password")
+    .populate("grophAdmin", "-password");
 
-//   if (!removed) {
-//     res.status(404);
-//     throw new Error("Chat Not Found");
-//   } else {
-//     res.json(removed);
-//   }
-// });
+  if (!removed) {
+    res.status(404);
+    throw new Error("Chat Not Found");
+  } else {
+    res.json(removed);
+  }
+});
