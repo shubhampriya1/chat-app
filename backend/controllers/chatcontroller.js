@@ -101,3 +101,33 @@ export const createGroupChat = asyncHandler(async (req, res) => {
     throw new Error(error.message);
   }
 });
+
+export const renameGroup = asyncHandler(async (req, res) => {
+  const { chatId, chatName } = req.body;
+  const updatesChat = await chatModel
+    .findByIdAndUpdate(
+      chatId,
+      {
+        chatName,
+      },
+      {
+        new: true,
+      }
+    )
+    .populate("users", "-password")
+    .populate("grophAdmin", "-password");
+
+  if (!updatesChat) {
+    res.status(404);
+    throw new Error(error.message);
+  } else {
+    res.json(updatesChat);
+  }
+});
+
+export const addGroup = asyncHandler(async (req, res) => {
+
+});
+export const removeFromGroup = asyncHandler(async (req, res) => {
+  
+});
