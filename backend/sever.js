@@ -17,11 +17,7 @@ app.get("/", (req, res) => {
 app.get("/api", (req, res) => {
   res.send(chats);
 });
-app.get("/api/:id", (req, res) => {
-  const singlechat = chats.find((c) => c._id === req.params.id);
-  res.send(singlechat);
-  console.log(req.params.id);
-});
+
 
 app.use("/api/user", authrouter);
 app.use("/api/chat", chatRoutes);
