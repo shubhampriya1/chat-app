@@ -17,6 +17,16 @@ import { EllipsisVertical, Send, Settings } from "lucide-react";
 
 const Chatpage = () => {
   const [chats, setChats] = useState([]);
+  useEffect(() => {
+    const fetchchats = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/chat");
+        setChats(response.data);
+      } catch (error) {
+        console.log("error fectimg data", error);
+      }
+    };
+  }, []);
 
   return (
     <div className="relative">
@@ -49,7 +59,7 @@ const Chatpage = () => {
                       className="rounded-full"
                       src="https://github.com/shadcn.png"
                     />
-                    <h1 className="ml-5 mt-3 font-bold">Ritik jha</h1>
+                    <h1 className="ml-5 mt-3 font-bold">vandana jha</h1>
                   </div>
                 </div>
               </CommandItem>
@@ -75,7 +85,7 @@ const Chatpage = () => {
               className="w-10 rounded-full"
               src="https://github.com/shadcn.png"
             />
-            <h1 className="mt-3 ml-4 font-bold">Ritik Jha</h1>
+            <h1 className="mt-3 ml-4 font-bold">anu</h1>
           </div>
           <div className="flex mt-2">
             <Settings className="mr-2" />
@@ -90,7 +100,7 @@ const Chatpage = () => {
             />
             <div className="h-9 ml-8 mt-8 ">
               <h1 className="border-2 pl-6 pr-5 pt-5 pb-5 rounded-md ">
-                Hello ritik
+                Hello r
               </h1>
             </div>
           </div>
@@ -101,9 +111,7 @@ const Chatpage = () => {
               src="https://github.com/shadcn.png"
             />
             <div className="h-9 ml-8 mt-8 ">
-              <h1 className="border-2 pl-6 pr-5 pt-5 pb-5 rounded-md">
-                Hello ritik
-              </h1>
+              <h1 className="border-2 pl-6 pr-5 pt-5 pb-5 rounded-md">Hello</h1>
             </div>
           </div>
         </div>
