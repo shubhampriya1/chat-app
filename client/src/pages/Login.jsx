@@ -16,28 +16,25 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthService } from "@/service/AuthService";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  
   const navigate = useNavigate();
-  async function submit(){
-    const backendurl = import.meta.env.Backendurl;
-    try {
-        const { data } = await axios.post(`http://localhost:5000/api/user/login`, {
-        email: username,
-        password: password,
-      });
+  async function submit() {
+    const { data, error } = await AuthService.Login({
+      email: username,
+      password: password,
+    });
 
-    navigate("/chats");
-    toast.success("Successfully Login your account");
-    } catch (error) {
-       toast.error(error.response.data);
-       
+    if (!error) {
+      navigate("/chats");
+      toast.success("Successfully Login your account");
+    } else {
+      toast.error("Error in login");
     }
-   
   }
   return (
     <div className="flex  items-center justify-center h-screen w-screen">
@@ -82,11 +79,8 @@ function Login() {
           <Link to={"/"}>
             <Button variant="outline">Cancel</Button>
           </Link>
-         
-            <Button onClick={submit}>
-              Submit
-            </Button>
-          
+
+          <Button onClick={submit}>Submit</Button>
         </CardFooter>
       </Card>
     </div>

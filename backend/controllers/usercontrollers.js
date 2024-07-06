@@ -23,12 +23,16 @@ export async function register(req, res) {
     });
     await newuser.save();
 
+    res.cookie("auth_token", generateTOken(newuser._id), {
+      maxAge: 90000000,
+      httpOnly: true,
+    });
+
     return res.status(200).json({
       userId: newuser._id,
       email: newuser.email,
       name: newuser.name,
       pic: newuser.pic,
-      token: generateTOken(newuser._id),
     });
   } catch (error) {
     console.log(error);
@@ -48,11 +52,15 @@ export async function login(req, res) {
     if (!user) {
       return res.status(404).send("No user with provided credentials found");
     }
+
+    res.cookie("auth_token", generateTOken(user._id), {
+      maxAge: 90000000,
+      httpOnly: true,
+    });
+
     res.status(200).json({
-      userId: user._id,
       username: user.username,
       useremail: user.email,
-      token: generateTOken(user._id),
     });
   } catch (error) {
     console.log(error);
@@ -68,7 +76,7 @@ export const allUser = asyncHandler(async (req, res) => {
           { email: { $regex: req.query.search, $options: "i" } },
         ],
       }
-    : {}; 
+    : {};
 
   const users = await User.find(keyword).find({
     _id: { $ne: req.user.user_id },

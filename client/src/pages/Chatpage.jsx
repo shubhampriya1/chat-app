@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./chatpage.css";
 import axios from "axios";
 import {
   Command,
@@ -17,16 +16,6 @@ import { EllipsisVertical, Send, Settings } from "lucide-react";
 
 const Chatpage = () => {
   const [chats, setChats] = useState([]);
-  useEffect(() => {
-    const fetchchats = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/chat");
-        setChats(response.data);
-      } catch (error) {
-        console.log("error fectimg data", error);
-      }
-    };
-  }, []);
 
   return (
     <div className="relative">
