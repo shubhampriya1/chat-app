@@ -12,10 +12,25 @@ import {
 } from "@/components/ui/command";
 
 import { Input } from "@/components/ui/input";
-import { EllipsisVertical, Send, Settings } from "lucide-react";
+import { EllipsisVertical, Search, Send, Settings } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Chatpage = () => {
   const [chats, setChats] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  useEffect(() => {
+    fetchMessage();
+  }, []);
+  const fetchMessage = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/chat/message"
+      );
+      setChats(response.data);
+    } catch (error) {
+      console.error("error fecting message", error);
+    }
+  };
 
   return (
     <div className="relative">
@@ -42,6 +57,10 @@ const Chatpage = () => {
                 </div>
               </CommandItem>
               <CommandItem>
+                <Link to="/search">
+                  <Search />
+                </Link>
+
                 <div className="h-20 ">
                   <div className="w-12 pt-3 ml-3 flex  ">
                     <img

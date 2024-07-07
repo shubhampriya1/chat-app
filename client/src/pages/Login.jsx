@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import Cookies from "js-cookie";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +16,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { AuthService } from "@/service/AuthService";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -24,16 +23,20 @@ function Login() {
 
   const navigate = useNavigate();
   async function submit() {
-    const { data, error } = await AuthService.Login({
-      email: username,
-      password: password,
-    });
-
-    if (!error) {
+    const backendurl = import.meta.env.Backendurl;
+    try {
+      const { data } = await axios.post(
+        `http://localhost:5000/api/user/login`,
+        {
+          email: username,
+          password: password,
+        }
+      );
+      Cookies.set("authtoken", data.token);
       navigate("/chats");
       toast.success("Successfully Login your account");
-    } else {
-      toast.error("Error in login");
+    } catch (error) {
+      toast.error(error.response.data);
     }
   }
   return (

@@ -33,6 +33,7 @@ export async function register(req, res) {
       email: newuser.email,
       name: newuser.name,
       pic: newuser.pic,
+      token: generateTOken(newuser._id),
     });
   } catch (error) {
     console.log(error);
@@ -61,6 +62,7 @@ export async function login(req, res) {
     res.status(200).json({
       username: user.username,
       useremail: user.email,
+      token: generateTOken(user._id),
     });
   } catch (error) {
     console.log(error);
