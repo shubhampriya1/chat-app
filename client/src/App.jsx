@@ -5,6 +5,7 @@ import Chatpage from "./pages/Chatpage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Search from "./pages/Search";
+import Message from "./pages/Message";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/chats" element={<Chatpage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/search" element={<Search />} />
+        <Route path='/chats/:chatId' element={<Message/>}/>
       </Routes>
     </Router>
   );
