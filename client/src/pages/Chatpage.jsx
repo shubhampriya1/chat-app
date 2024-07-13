@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-
 import SideBar from "@/components/SideBar";
 
 const Chatpage = () => {
   return (
-    <div className="relative">
-      <SideBar />
-      <div className="h-screen w-full flex items-center justify-center">
-        Select a chat and Start typing
+    <div className="h-screen w-screen overflow-hidden flex">
+      <div className="w-[300px]">
+        <SideBar />
+      </div>
+      <div className="flex-1 h-screen w-full flex flex-col items-center justify-center">
+        <img src="" alt="Logo" />
+        <p>Select a chat and start typing</p>
       </div>
     </div>
   );

@@ -7,16 +7,24 @@ export const protect = asyncHandler(async (req, res, next) => {
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
-     console.log("running from her1");
     try {
       token = req.headers.authorization.split(" ")[1];
-      const decode = jwt.verify(token, process.env.jwt_Secert);
-      req.user = await User.findById(decode._id).select("-password");
-        
-      console.log("running from here");
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded._id).select("-password");
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      req.user = user;
       next();
     } catch (error) {
-      return res.status(500).send("Not authorised");
+      console.error(error);
+      res.status(401);
+      throw new Error("Not authorized, token failed");
     }
+  }
+  if (!token) {
+    res.status(401).json({ message: "Not authorized, no token" });
   }
 });

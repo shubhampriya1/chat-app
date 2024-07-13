@@ -1,4 +1,3 @@
-import { ModeToggle } from "@/components/mode-toggle";
 import {
   Card,
   CardContent,
@@ -12,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -23,18 +22,15 @@ function Login() {
 
   const navigate = useNavigate();
   async function submit() {
-    const backendurl = import.meta.env.Backendurl;
+    const backendurl = import.meta.env.VITE_PUBLIC_BACKEND_URL;
     try {
-      const { data } = await axios.post(
-        `http://localhost:5000/api/user/login`,
-        {
-          email: username,
-          password: password,
-        }
-      );
-      Cookies.set("authtoken", data.token);
+      const { data } = await axios.post(`${backendurl}/api/user/login`, {
+        email: username,
+        password: password,
+      });
+      Cookies.set("authtoken", data.token, { expires: 7 });
       navigate("/chats");
-      toast.success("Successfully Login your account");
+      toast.success("Successfully logged in");
     } catch (error) {
       toast.error(error.response.data);
     }
