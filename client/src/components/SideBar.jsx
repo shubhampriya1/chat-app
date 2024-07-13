@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Command,
   CommandEmpty,
@@ -8,11 +7,39 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
 
 const SideBar = () => {
+  const [users, setUser] = useState([]);
+
+  useEffect(() => {
+    const backendurl = import.meta.env.VITE_PUBLIC_BACKEND_URL;
+    const token = Cookies.get("authtoken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const fetchUsers = async () => {
+      try {
+        const { data } = await axios.get(
+          `${backendurl}/api/message/users`,
+          config
+        );
+
+        setUser(data);
+      } catch (error) {
+        setUser([]);
+      }
+    };
+    fetchUsers();
+  }, []);
   return (
     <div>
-      <div className="w-[300px] absolute">
+      <div>
         <Command className="h-screen border-gray-500 border-r-[1px]">
           <CommandInput
             className="h-18"
@@ -22,46 +49,39 @@ const SideBar = () => {
             <CommandEmpty>No results found.</CommandEmpty>
 
             <CommandSeparator />
-            <CommandGroup heading="Settings">
-              <CommandItem>
-                <div className="h-20 ">
-                  <div className="w-12 pt-3 ml-3 flex ">
-                    <img
-                      className="rounded-full"
-                      src="https://github.com/shadcn.png"
-                    />
-                    <h1 className="ml-5 mt-3 font-bold">satu</h1>
-                  </div>
-                </div>
-              </CommandItem>
-              <CommandItem>
-                <div className="h-20 ">
-                  <div className="w-12 pt-3 ml-3 flex  ">
-                    <img
-                      className="rounded-full"
-                      src="https://github.com/shadcn.png"
-                    />
-                    <h1 className="ml-5 mt-3 font-bold">vandana jha</h1>
-                  </div>
-                </div>
-              </CommandItem>
-              <CommandItem>
-                <div className="h-20 ">
-                  <div className="w-12 pt-3 ml-3 flex  ">
-                    <img
-                      className="rounded-full"
-                      src="https://github.com/shadcn.png"
-                    />
-                    <h1 className="ml-5 mt-3 font-bold">Shubham</h1>
-                  </div>
-                </div>
-              </CommandItem>
+
+            <CommandGroup heading="Chats">
+              {users.length
+                ? users?.map((user) => (
+                    <Link to={"/chats/" + user?.users[0]?._id} key={user._id}>
+                      <CommandItem className="cursor-pointer">
+                        <div className="flex gap-4">
+                          <img
+                            className="rounded-full w-10 h-10"
+                            src={user?.users[0]?.pic}
+                            onError={(e) => {
+                              e.target.src = "https://github.com/shadcn.png";
+                            }}
+                          />
+                          <div className="flex flex-col justify-between">
+                            <h1 className="font-bold">
+                              {user?.users[0]?.name}
+                            </h1>
+                            <p className="text-xs">
+                              {user?.latestMessage?.content}
+                            </p>
+                          </div>
+                        </div>
+                      </CommandItem>
+                    </Link>
+                  ))
+                : null}
             </CommandGroup>
           </CommandList>
         </Command>
       </div>
     </div>
   );
-}
+};
 
-export default SideBar
+export default SideBar;

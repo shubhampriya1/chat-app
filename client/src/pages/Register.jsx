@@ -29,8 +29,6 @@ function Register() {
     !email.match(emailRegex) ||
     !password.length > 8;
 
-  // setLoading(false);
-
   return (
     <div className="flex items-center justify-center h-screen w-screen">
       <Card className="md:w-96 m-auto bg-transparent">
@@ -55,8 +53,7 @@ function Register() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
-                <p className="text-sm text-muted-foreground">
-                </p>
+                <p className="text-sm text-muted-foreground"></p>
               </div>
               <div className="flex flex-col items-start gap-1 space-y-1.5">
                 <Label htmlFor="username">Username</Label>
