@@ -70,6 +70,19 @@ export async function login(req, res) {
   }
 }
 
+export const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+  if (user) {
+    res.status(200).json({
+      name: user.name,
+      email: user.email,
+      pic: user.pic,
+    });
+  } else {
+    res.status(404).json({ message: "User not found" });
+  }
+});
+
 export const allUser = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {

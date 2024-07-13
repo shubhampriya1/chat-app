@@ -1,4 +1,3 @@
-// import { chatModel } from "../model/chatModel.model.js.";
 import asyncHandler from "express-async-handler";
 import { User } from "../model/user.model.js";
 import { chatModel } from "../model/chatModel.model..js";
@@ -7,8 +6,9 @@ export const accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
 
   if (!userId) {
-    console.log("userid param not sent");
-    return res.sendStatus(400);
+    return res.sendStatus(400).json({
+      message: "User ID not sent.",
+    });
   }
 
   try {
@@ -22,19 +22,16 @@ export const accessChat = asyncHandler(async (req, res) => {
       .populate("latestMessage");
 
     if (existingChat) {
-      // If chat exists, return it
       res.send(existingChat);
     } else {
-      // If chat doesn't exist, create a new chat
       const chatData = {
-        chatName: "Direct Chat", // Optionally, you can give a name to the chat
+        chatName: "Direct Chat",
         isGroupChat: false,
         users: [req.user._id, userId],
       };
 
       const newChat = await chatModel.create(chatData);
 
-      // Populate the newly created chat with user details
       const populatedChat = await chatModel
         .findById(newChat._id)
         .populate("users", "-password");
@@ -42,7 +39,6 @@ export const accessChat = asyncHandler(async (req, res) => {
       res.status(200).send(populatedChat);
     }
   } catch (error) {
-    // Handle any errors that occur during the process
     console.error("Error in accessing/changing chat:", error);
     res.status(500).send({ message: "Failed to access/change chat." });
   }
