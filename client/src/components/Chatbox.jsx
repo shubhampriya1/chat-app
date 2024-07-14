@@ -34,7 +34,7 @@ const Chatbox = (props) => {
       );
 
       setChatId(data._id);
-      setUserData(data?.users?.find((user) => user._id !== props.chatId));
+      setUserData(data?.users?.find((user) => user._id === props.chatId));
 
       const { data: chats } = await axios.get(
         `${backendUrl}/api/message/${data._id}`,
