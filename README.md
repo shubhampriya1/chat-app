@@ -24,21 +24,6 @@ This project is a chat application developed using the MERN stack (MongoDB, Expr
 
 Refer to https://nodejs.org/en/ to install nodejs
 
-#### Install TypeScript
-
-Refer to https://www.typescriptlang.org/ to install typescript
-
-```bash
-npm install -g typescript
-```
-
-#### Install ts-node
-
-Refer to https://www.typescriptlang.org/ to install typescript
-
-```bash
-npm install -g ts-node
-```
 
 #### Learn Tailwind CSS
 
