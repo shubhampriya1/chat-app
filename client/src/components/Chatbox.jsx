@@ -1,12 +1,12 @@
+import { useAuth } from "@/hooks/use-auth";
+import { useSocket } from "@/hooks/use-socket";
+import axios from "axios";
 import Cookies from "js-cookie";
+import { Search, Send } from "lucide-react";
+import PropType from "prop-types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Settings, EllipsisVertical, Send } from "lucide-react";
-import axios from "axios";
 import { Input } from "./ui/input";
-import PropType from "prop-types";
-import { useSocket } from "@/hooks/use-socket";
-import { useAuth } from "@/hooks/use-auth";
 
 const Chatbox = (props) => {
   const [newMessage, setNewMessage] = useState("");
@@ -14,7 +14,7 @@ const Chatbox = (props) => {
   const [resultmessage, setResultmessage] = useState([]);
   const [chatId, setChatId] = useState("");
 
-  const { socket } = useSocket();
+  const { socket, connected } = useSocket();
   const { user } = useAuth();
 
   const backendUrl = import.meta.env.VITE_PUBLIC_BACKEND_URL;
@@ -52,10 +52,18 @@ const Chatbox = (props) => {
   }
 
   useEffect(() => {
-    fetchMessage();
-    socket.emit("setup", chatId);
+    if (!connected) {
+      setInterval(() => {
+        fetchMessage();
+      }, 1000);
+    } else {
+      fetchMessage();
+    }
   }, [props.chatId]);
 
+  useEffect(() => {
+    socket.emit("setup", chatId);
+  }, [chatId, socket]);
   async function sendMessage(e) {
     e.preventDefault();
     try {
@@ -106,12 +114,19 @@ const Chatbox = (props) => {
           />
           <h1 className="mt-3 ml-4 font-bold">{userData?.name}</h1>
         </div>
-        <div className="flex mt-2">
+        <div className="flex mt-2 items-center gap-5">
           <Link to="/search">
-            <Search className="mr-8" />
+            <Search />
           </Link>
-          <Settings className="mr-8" />
-          <EllipsisVertical />
+          {connected ? (
+            <div className="text-xs bg-green-500 rounded-full px-3 py-1">
+              Live
+            </div>
+          ) : (
+            <div className="text-xs bg-yellow-500 rounded-full px-3 py-1">
+              Fallback
+            </div>
+          )}
         </div>
       </div>
       <div className="  flex-1 gap-5 flex flex-col max-h-full overflow-y-scroll mt-5 px-5">
