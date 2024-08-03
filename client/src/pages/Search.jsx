@@ -3,13 +3,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
-import Chatpage from "./Chatpage";
+import { toast } from "sonner";
 
 const Search = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState([]);
 
   const fetchUser = async () => {
+    const backendurl = import.meta.env.VITE_PUBLIC_BACKEND_URL;
     if (searchInput.length < 3) return;
     try {
       const token = Cookies.get("authtoken");
@@ -22,15 +23,14 @@ const Search = () => {
         },
       };
 
-      const Users = await axios.get(
-        "http://localhost:5000/api/user/?search=" + searchInput,
+      const { data } = await axios.get(
+        `${backendurl}/api/user/?search=` + searchInput,
         config
       );
 
-      setSearchResult(Users.data);
-      console.log(Users.data);
+      setSearchResult(data);
     } catch (error) {
-      console.log("error", error);
+      toast.error("Error fetching users");
     }
   };
 
@@ -38,7 +38,7 @@ const Search = () => {
     fetchUser();
   }, [searchInput]);
   return (
-    <div className="p-10">
+    <div className="p-10 h-screen">
       <Input
         placeholder="search for users"
         onChange={(e) => setSearchInput(e.target.value)}
@@ -46,7 +46,7 @@ const Search = () => {
       {searchResult.length != 0 ? (
         <div>
           {searchResult.map((user) => (
-            <Link to={`/user/${user.id}`} key={user.id} className="block">
+            <Link to={`/chats/${user._id}`} key={user._id} className="block">
               <div className="flex border p-2 mb-2 mt-7 rounded-md">
                 <img
                   className="h-9 rounded-full"
@@ -64,7 +64,7 @@ const Search = () => {
           ))}
         </div>
       ) : (
-        <div className="h-full w-full  flex-1 flex items-center justify-center">
+        <div className="h-full w-full flex items-center justify-center">
           No Result
         </div>
       )}
