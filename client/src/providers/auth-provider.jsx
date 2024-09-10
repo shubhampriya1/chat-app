@@ -9,6 +9,7 @@ AuthProvider.propTypes = {
 
 const initialState = {
   user: null,
+  setUser: () => null,
   loading: true,
   logout: () => null,
 };
@@ -27,13 +28,23 @@ function AuthProvider({ children }) {
     async function fetchUser() {
       const backendUrl = import.meta.env.VITE_PUBLIC_BACKEND_URL;
       const token = Cookies.get("authtoken");
+      console.log(token);
       if (token) {
-        const { data } = await axios.get(`${backendUrl}/api/user/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setUser(data);
+        console.log("fetching user");
+        try {
+          const { data } = await axios.get(`${backendUrl}/api/user/me`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          setUser(data);
+        } catch (error) {
+          if (token) {
+            Cookies.remove("authtoken");
+          }
+          setUser(null);
+        }
       }
       setLoading(false);
     }
@@ -43,6 +54,7 @@ function AuthProvider({ children }) {
 
   const value = {
     user,
+    setUser,
     loading,
     logout,
   };

@@ -1,16 +1,21 @@
+import { useAuth } from "@/hooks/use-auth";
+import { useSocket } from "@/hooks/use-socket";
+import axios from "axios";
 import Cookies from "js-cookie";
+import { Search, Send } from "lucide-react";
+import PropType from "prop-types";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Settings, EllipsisVertical, Send } from "lucide-react";
-import axios from "axios";
 import { Input } from "./ui/input";
-import PropType from "prop-types";
 
 const Chatbox = (props) => {
   const [newMessage, setNewMessage] = useState("");
   const [userData, setUserData] = useState({});
   const [resultmessage, setResultmessage] = useState([]);
   const [chatId, setChatId] = useState("");
+
+  const { socket, connected } = useSocket();
+  const { user } = useAuth();
 
   const backendUrl = import.meta.env.VITE_PUBLIC_BACKEND_URL;
   async function fetchMessage() {
@@ -47,9 +52,20 @@ const Chatbox = (props) => {
   }
 
   useEffect(() => {
-    fetchMessage();
+    if (!connected) {
+      setInterval(() => {
+        fetchMessage();
+      }, 1000);
+    } else {
+      fetchMessage();
+    }
   }, [props.chatId]);
-  async function sendMessage() {
+
+  useEffect(() => {
+    socket.emit("setup", chatId);
+  }, [chatId, socket]);
+  async function sendMessage(e) {
+    e.preventDefault();
     try {
       const token = Cookies.get("authtoken");
       if (!token) {
@@ -62,12 +78,29 @@ const Chatbox = (props) => {
       };
       const body = { content: newMessage, chatId: chatId };
       await axios.post(`${backendUrl}/api/message`, body, config);
+      socket.emit("message", {
+        chatId,
+        message: {
+          _id: Math.random(),
+          content: newMessage,
+          sender: {
+            ...user,
+          },
+        },
+      });
       setNewMessage("");
-      fetchMessage();
     } catch (error) {
       console.log("error", error);
     }
   }
+
+  useEffect(() => {
+    socket.on("message", (message) => {
+      console.log(message);
+      setResultmessage((prev) => [...prev, message]);
+    });
+  }, []);
+
   return (
     <div className="flex flex-col h-screen ">
       <div className=" w-full py-3 px-3 border-2 flex justify-between rounded-md  bg-slate-600">
@@ -81,49 +114,51 @@ const Chatbox = (props) => {
           />
           <h1 className="mt-3 ml-4 font-bold">{userData?.name}</h1>
         </div>
-        <div className="flex mt-2">
+        <div className="flex mt-2 items-center gap-5">
           <Link to="/search">
-            <Search className="mr-8" />
+            <Search />
           </Link>
-          <Settings className="mr-8" />
-          <EllipsisVertical />
+          {connected ? (
+            <div className="text-xs bg-green-500 rounded-full px-3 py-1">
+              Live
+            </div>
+          ) : (
+            <div className="text-xs bg-yellow-500 rounded-full px-3 py-1">
+              Fallback
+            </div>
+          )}
         </div>
       </div>
-      <div className="mr-8  flex-1 gap-5 flex flex-col max-h-full overflow-y-scroll mt-5 px-2">
+      <div className="  flex-1 gap-5 flex flex-col max-h-full overflow-y-scroll mt-5 px-5">
         {resultmessage.map((item, index) => (
           <div
             key={index}
             className={`flex gap-3 items-center ${
-              resultmessage?.sender?.id === props.chatId
+              item?.sender?._id === props.chatId
                 ? "justify-start"
                 : "justify-end"
             }`}
           >
-            <img
-              className="h-10 w-10 rounded-full"
-              src="https://github.com/shadcn.png"
-            />
-            <div>
-              <h1 className="border-2 rounded-md px-5 py-2">{item.content}</h1>
-            </div>
+            <h1 className="border-2 rounded-md px-5 py-2">{item.content}</h1>
           </div>
         ))}
       </div>
 
-      <div className="flex">
+      <form className="flex">
         <Input
           className="mb-1 mr-1 "
           placeholder="Enter your message"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />
-        <div
+        <button
           className="bg-blue-500 rounded-md w-10 mb-1 "
+          type="submit"
           onClick={sendMessage}
         >
           <Send className="mt-3 ml-1" />
-        </div>
-      </div>
+        </button>
+      </form>
     </div>
   );
 };
