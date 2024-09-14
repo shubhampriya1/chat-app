@@ -10,9 +10,7 @@ const Message = () => {
       <div className="w-[300px]">
         <SideBar />
       </div>
-      <div className="flex-1">
-        <Chatbox chatId={chatId} />
-      </div>
+      <div className="flex-1"><Chatbox chatId={chatId} /></div>
     </div>
   );
 };

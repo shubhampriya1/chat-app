@@ -28,9 +28,8 @@ function AuthProvider({ children }) {
     async function fetchUser() {
       const backendUrl = import.meta.env.VITE_PUBLIC_BACKEND_URL;
       const token = Cookies.get("authtoken");
-      console.log(token);
+
       if (token) {
-        console.log("fetching user");
         try {
           const { data } = await axios.get(`${backendUrl}/api/user/me`, {
             headers: {

@@ -63,7 +63,7 @@ const Chatbox = (props) => {
 
   useEffect(() => {
     socket.emit("setup", chatId);
-  }, [chatId, socket]);
+  }, [chatId]);
   async function sendMessage(e) {
     e.preventDefault();
     try {
@@ -96,7 +96,6 @@ const Chatbox = (props) => {
 
   useEffect(() => {
     socket.on("message", (message) => {
-      console.log(message);
       setResultmessage((prev) => [...prev, message]);
     });
   }, []);
@@ -115,7 +114,10 @@ const Chatbox = (props) => {
           <h1 className="mt-3 ml-4 font-bold">{userData?.name}</h1>
         </div>
         <div className="flex mt-2 items-center gap-5">
-          <Link to="/search">
+          <Link
+            to="/search"
+            className="absolute bottom-10 right-10 bg-gray-500 rounded-full p-3"
+          >
             <Search />
           </Link>
           {connected ? (

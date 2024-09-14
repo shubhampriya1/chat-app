@@ -18,6 +18,7 @@ function App() {
           path="/"
           element={
             <PublicRoute>
+              {/* It provides protection to / and /register */}
               <Login />
             </PublicRoute>
           }

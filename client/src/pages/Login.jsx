@@ -29,7 +29,7 @@ function Login() {
         password: password,
       });
       Cookies.set("authtoken", data.token, { expires: 7 });
-      navigate("/chats");
+      window.location.reload();
       toast.success("Successfully logged in");
     } catch (error) {
       toast.error(error.response.data);

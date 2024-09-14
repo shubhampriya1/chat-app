@@ -44,7 +44,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("message", (newMessage) => {
-    console.log(newMessage);
     const { chatId, message } = newMessage;
 
     io.to(chatId).emit("message", message);
